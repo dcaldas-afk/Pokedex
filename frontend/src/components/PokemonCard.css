@@ -1,0 +1,39 @@
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.card-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.card {
+
+    background: white;
+
+    border-radius: 15px;
+
+    padding: 20px;
+
+    text-align: center;
+
+    box-shadow: 0 2px 8px #ccc;
+
+    transition: transform 0.2s;
+
+}
+
+
+.card:hover {
+
+    transform: scale(1.05);
+
+}
+
+
+.card img {
+
+    width: 120px;
+
+}

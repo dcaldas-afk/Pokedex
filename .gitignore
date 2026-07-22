@@ -1,0 +1,60 @@
+# ======================
+# Ambiente / Secrets
+# ======================
+
+.env
+.env.*
+!.env.example
+
+
+# ======================
+# Python (Backend)
+# ======================
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ambientes virtuais
+venv/
+.venv/
+env/
+
+# Cache de ferramentas
+.pytest_cache/
+.mypy_cache/
+
+
+# ======================
+# Node / React (Frontend)
+# ======================
+
+node_modules/
+dist/
+
+# Vite
+.vite/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+# ======================
+# IDEs / Editores
+# ======================
+
+.vscode/
+.idea/
+
+
+# ======================
+# Sistema
+# ======================
+
+.DS_Store
+Thumbs.db
+
+# Windows downloaded file metadata
+*:Zone.Identifier
