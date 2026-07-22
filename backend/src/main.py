@@ -11,7 +11,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://pokedex-psi-ecru-36.vercel.app/"
+        "https://seu-backend.onrender.com/pokemon"
         "http://localhost:5173"
     ],
     allow_credentials=True,
