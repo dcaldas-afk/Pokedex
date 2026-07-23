@@ -63,3 +63,13 @@ FROM pokemon
 WHERE nome ILIKE %s
 ORDER BY pokeapi_id;
 """
+
+SEARCH_POKEMON_BY_GEN = """
+SELECT
+    pokeapi_id,
+    nome,
+    sprite
+FROM pokemon
+WHERE geracao = %s
+ORDER BY pokeapi_id;
+"""

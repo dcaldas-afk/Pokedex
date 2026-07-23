@@ -3,9 +3,7 @@ from src.database.query import (
     SEARCH_POKEMON,
     SEARCH_POKEMON_TYPES,
     SEARCH_ABILITY,
-    LIST_POKEMON,
-    SEARCH_POKEMON_BY_TYPE,
-    SEARCH_POKEMON_NAME
+    LIST_POKEMON
 )
 
 
@@ -79,6 +77,15 @@ def list_pokemon(limit: int, offset: int):
 
     try:
 
+        # total de pokemons
+        cursor.execute(
+            "SELECT COUNT(*) FROM pokemon"
+        )
+
+        total = cursor.fetchone()[0]
+
+
+        # pokemons da página
         cursor.execute(
             LIST_POKEMON,
             (limit, offset)
@@ -87,16 +94,21 @@ def list_pokemon(limit: int, offset: int):
         pokemons = cursor.fetchall()
 
 
-        return [
-            {
-                "pokeapi_id": pokemon[0],
-                "nome": pokemon[1],
-                "altura": pokemon[2],
-                "peso": pokemon[3],
-                "sprite": pokemon[4]
-            }
-            for pokemon in pokemons
-        ]
+        return {
+
+            "pokemons": [
+                {
+                    "pokeapi_id": pokemon[0],
+                    "nome": pokemon[1],
+                    "altura": pokemon[2],
+                    "peso": pokemon[3],
+                    "sprite": pokemon[4]
+                }
+                for pokemon in pokemons
+            ],
+
+            "total": total
+        }
 
 
     finally:
@@ -104,64 +116,111 @@ def list_pokemon(limit: int, offset: int):
         cursor.close()
         conn.close()
 
-
-
-def search_type(nome):
+def filter_pokemon(nome, tipo, geracao, page, limit):
 
     conn = get_connection()
     cursor = conn.cursor()
 
     try:
 
+        base_query = """
+        FROM pokemon p
+        """
+
+        parametros = []
+        where = []
+
+
+        if tipo:
+
+            base_query += """
+            JOIN pokemon_tipo pt
+                ON p.id = pt.pokemon_id
+            JOIN tipo t
+                ON pt.tipo_id = t.id
+            """
+
+            where.append("t.nome = %s")
+            parametros.append(tipo.capitalize())
+
+
+        if nome:
+
+            where.append("p.nome ILIKE %s")
+            parametros.append(f"%{nome}%")
+
+
+        if geracao:
+
+            where.append("p.geracao = %s")
+            parametros.append(geracao)
+
+        # Conta total de resultados
+
+        count_query = """
+        SELECT COUNT(DISTINCT p.id)
+        """ + base_query
+
+
+        if where:
+
+            count_query += " WHERE " + " AND ".join(where)
+
+
         cursor.execute(
-            SEARCH_POKEMON_BY_TYPE,
-            (nome,)
+            count_query,
+            parametros
+        )
+
+        total = cursor.fetchone()[0]
+
+        # Busca os pokemons da página
+
+        query = """
+        SELECT DISTINCT
+            p.pokeapi_id,
+            p.nome,
+            p.sprite
+        """ + base_query
+
+
+        if where:
+
+            query += " WHERE " + " AND ".join(where)
+
+        offset = (page - 1) * limit
+
+        query += """
+        ORDER BY p.pokeapi_id
+        LIMIT %s OFFSET %s
+        """
+
+        parametros.extend([
+            limit,
+            offset
+        ])
+
+
+        cursor.execute(
+            query,
+            parametros
         )
 
         pokemons = cursor.fetchall()
 
+        return {
 
-        return [
-            {
-                "pokeapi_id": pokemon[0],
-                "nome": pokemon[1],
-                "sprite": pokemon[2]
-            }
-            for pokemon in pokemons
-        ]
+            "pokemons": [
+                {
+                    "pokeapi_id": pokemon[0],
+                    "nome": pokemon[1],
+                    "sprite": pokemon[2]
+                }
+                for pokemon in pokemons
+            ],
 
-
-    finally:
-
-        cursor.close()
-        conn.close()
-
-
-
-def search_pokemons(nome):
-
-    conn = get_connection()
-    cursor = conn.cursor()
-
-    try:
-
-        cursor.execute(
-            SEARCH_POKEMON_NAME,
-            (f"%{nome}%",)
-        )
-
-        pokemons = cursor.fetchall()
-
-
-        return [
-            {
-                "pokeapi_id": pokemon[0],
-                "nome": pokemon[1],
-                "sprite": pokemon[2]
-            }
-            for pokemon in pokemons
-        ]
-
+            "total": total
+        }
 
     finally:
 

@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import api from "../services/api";
 import "./PokemonDetails.css";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import tiposTraduzidos from "../utils/tiposTraduzidos";
 
 function PokemonDetails() {
+
+    const navigate = useNavigate();
 
     const { nome } = useParams();
 
@@ -29,11 +32,32 @@ function PokemonDetails() {
     return tipo.toLowerCase();
 
     }
-
+console.log(pokemon.tipos);
     return (
 
         <div className="pokemon-details">
 
+            <div className="top-bar">
+
+                <button
+                    className="nav-button"
+                    onClick={() => navigate(-1)}
+                >
+                    ← Voltar
+                </button>
+
+                <Link
+                    to="/"
+                    className="home-button"
+                >
+                    <img
+                        src="/dex.png"
+                        alt="Pokédex"
+                        className="home-icon"
+                    ></img>
+                </Link>
+
+            </div>
             <h1>
                 #{pokemon.pokeapi_id} {pokemon.nome}
             </h1>
@@ -72,7 +96,7 @@ function PokemonDetails() {
                             className={`tag ${tipoClasse(tipo)}`}
                             key={tipo}
                         >
-                            {tipo}
+                            {tiposTraduzidos[tipo.toLowerCase()] || tipo}
                         </span>
 
                     ))

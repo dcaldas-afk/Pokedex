@@ -51,6 +51,32 @@ def get_id(cursor, tabela, nome):
 
     return cursor.fetchone()[0]
 
+def get_gen(id):
+
+    resp = requests.get(
+        f"https://pokeapi.co/api/v2/pokemon-species/{id}",
+        timeout=10
+    )
+
+    resp.raise_for_status()
+
+    especie = resp.json()
+
+    geracao = especie["generation"]["name"]
+
+    mapa = {
+        "generation-i": "I",
+        "generation-ii": "II",
+        "generation-iii": "III",
+        "generation-iv": "IV",
+        "generation-v": "V",
+        "generation-vi": "VI",
+        "generation-vii": "VII",
+        "generation-viii": "VIII",
+        "generation-ix": "IX"
+    }
+
+    return mapa[geracao]
 
 # Função pra importar coisas da PokéAPI + validações
 # ==========================
@@ -87,7 +113,8 @@ def poke_import(n):
                 nome,
                 altura,
                 peso,
-                sprite
+                sprite,
+                geracao
             )
 
             VALUES (%s,%s,%s,%s,%s)
@@ -100,6 +127,7 @@ def poke_import(n):
             pokemon["height"] / 10,
             pokemon["weight"] / 10,
             pokemon["sprites"].get("front_default")
+            get_geracao(pokemon["id"])
         ))
 
         pokemon_id = cursor.fetchone()[0]

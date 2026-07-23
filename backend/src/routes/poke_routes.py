@@ -1,13 +1,39 @@
 from fastapi import APIRouter, HTTPException
+
 from src.services.poke_service import (
     search_pokemon,
     list_pokemon,
-    search_type,
-    search_pokemons
+    filter_pokemon as filter_pokemon_service
 )
 
 
 router = APIRouter()
+
+
+@router.get("/pokemon")
+def list(
+    limit: int = 50,
+    offset: int = 0
+):
+    return list_pokemon(limit, offset)
+
+
+@router.get("/pokemon/filter")
+def filter_pokemon(
+    nome: str | None = None,
+    tipo: str | None = None,
+    geracao: str | None = None,
+    page: int = 1,
+    limit: int = 50
+):
+
+    return filter_pokemon_service(
+        nome,
+        tipo,
+        geracao,
+        page,
+        limit
+    )
 
 
 @router.get("/pokemon/{nome}")
@@ -22,20 +48,3 @@ def pokemon(nome: str):
         )
 
     return resultado
-
-@router.get("/pokemon")
-def list(
-    limit: int = 50,
-    offset: int = 0
-):
-    return list_pokemon(limit, offset)
-
-@router.get("/tipo/{nome}")
-def tipo(nome: str):
-
-    return search_type(nome)
-
-@router.get("/pokemon/search/{nome}")
-def search(nome: str):
-
-    return search_pokemons(nome)

@@ -151,3 +151,73 @@
 .fairy {
     background: #EF70EF;
 }
+
+.top-bar {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+
+}
+
+.nav-button {
+
+    font-size: 20px;
+
+    padding: 10px 18px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #fdfdfd;
+
+    color: rgb(0, 0, 0);
+
+    font-weight: bold;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition: background 0.2s;
+
+    margin-left: -20px;
+
+}
+
+.home-icon {
+
+    width: 60px;
+
+    height: 60px;
+
+    margin-left: -28px;
+
+}
+
+.home-button {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 10px;
+
+    height: 10px;
+
+}
+
+.nav-button:hover {
+
+    /*background: #d11212;*/
+    text-decoration: underline;
+
+}
+
