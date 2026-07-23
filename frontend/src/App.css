@@ -54,14 +54,14 @@ body {
 
 .page-number:hover{
 
-    background-color: rgb(83, 157, 188);
+    background-color: rgb(213, 53, 53);
     color: rgb(0, 0, 0);
 
 }
 
 .page-number.active {
 
-    background-color: rgb(83, 157, 188);
+    background-color: rgb(213, 53, 53);
 
     font-weight: bold;
 
@@ -111,7 +111,7 @@ body {
 
     border-radius:8px;
     
-    background:rgb(83,157,188);
+    background:rgb(213, 53, 53);
 
     color:white;
 
@@ -188,7 +188,7 @@ body {
 
     border-radius:8px;
 
-    background:rgb(83,157,188);
+    background:#1c9728;
 
     color:white;
 
@@ -201,5 +201,5 @@ body {
 .search-icon{
 
     font-size:18px;
-
+    filter: brightness(0) invert(1);
 }
